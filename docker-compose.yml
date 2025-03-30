@@ -1,0 +1,25 @@
+services:
+  selenium:
+    image: selenium/standalone-chrome
+    container_name: selenium-container
+    ports:
+      - "4444:4444" # Selenium server
+    shm_size: 2gb # Prevents crashes due to /dev/shm limitations
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4444/wd/hub/status"]
+      interval: 30s # Check every 30 seconds
+      timeout: 10s # Fail the check if no response in 10s
+      retries: 5 # Retry up to 5 times before marking unhealthy
+      start_period: 30s # Allow 30s for startup before checks begin
+
+  python-app:
+    build: .
+    container_name: automation
+    depends_on:
+      selenium:
+        condition: service_healthy # Ensures Selenium is fully ready
+    working_dir: /app
+    stdin_open: true  # Keep stdin open
+    command: ["python", "main.py"]
+    volumes:
+      - .:/app

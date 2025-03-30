@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+.cache/
+*.swp
+*.c
+*.so
+.vscode/
+자동화결과/
+source_code/boundary/

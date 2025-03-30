@@ -3,7 +3,7 @@ from pathlib import Path
 
 from source_code.config.logging_config import setup_logger
 
-logger = setup_logger(__name__)
+logger = setup_logger(__name__.split(".")[-1])
 
 
 def check_new_file(func) -> bool:

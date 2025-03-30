@@ -1,12 +1,8 @@
 import time
 from pathlib import Path
-from typing import Union
-
-from selenium.webdriver.remote.webelement import WebElement
 
 from source_code.config.logging_config import setup_logger
 from source_code.processors.collection_processor.selenium_scraper import SeleniumScraper
-from source_code.processors.refinement_processor.refiner import Refiner
 
 logger = setup_logger(__name__.split(".")[-1])
 
@@ -77,6 +73,7 @@ class Geocoder:
         max_retries = 30
         retries = 0
         while retries < max_retries:
+            logger.info("모니터링 페이지 접속 시도 : %d / %d", retries + 1, max_retries)
             try:
                 # 다운로드 버튼 존재 확인
                 download_button = self.selenium_scraper.find_element(
@@ -97,6 +94,7 @@ class Geocoder:
                 if retries > max_retries:
                     logger.error("모니터링 페이지 로드 불가능")
                     return False
+        logger.info("모니터링 페이지 접속 완료 : %d / %d", retries + 1, max_retries)
 
         # 다운로드 가능 여부 확인
         while "disabled" in download_button.get_attribute("class"):
